@@ -38,7 +38,13 @@ class HexTrieNode(object):
         node from its cache entry, call this method and the trie will
         fix itself
         """
+        # XXX untested
+
         if not self.parent:
+            return
+
+        if self.children:
+            # We shouldn't ever need to remove non-leaf nodes
             return
 
         del self.parent.children[self.name[-1]]
@@ -66,31 +72,27 @@ class HexTrieNode(object):
         return child.search(address[1:], path)
 
 
-class RootHexTrieNode(HexTrieNode):
+class HexTrie(object):
 
     def __init__(self):
-        HexTrieNode.__init__(self, None, "Root", None)
-
-    def add_child(self):
-        raise NotImplementedError(
-                "Not implemented for root node. Use add_node instead.")
+        self.root = HexTrieNode(None, "Root", None)
 
     def add_node(self, cache_entry):
         name = cache_entry[0]
         try:
-            child = self.children[name[0]]
+            child = self.root.children[name[0]]
         except KeyError:
-            self.children[name[0]] = HexTrieNode(
-                    self, name[0], cache_entry)
+            self.root.children[name[0]] = HexTrieNode(
+                    self.root, name[0], cache_entry)
             return
 
         child.add_child(name[1:], cache_entry)
 
     def search(self, address):
-        return HexTrieNode.search(self, address, [])
+        return self.root.search(address, [])
 
     def remove(self, address):
-        node, _ = self.search(address)
+        node, _ = self.root.search(address)
         if node:
             node.remove()
 
@@ -128,7 +130,7 @@ class Switch(object):
     def __init__(self, num_ports, cache_size):
         self.num_ports = num_ports
         self.cache = Cache(self, cache_size)
-        self.trie = RootHexTrieNode()
+        self.trie = HexTrie()
 
     def run_simulation(self, packets):
         for packet in packets:
