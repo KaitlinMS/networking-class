@@ -1,0 +1,29 @@
+REPORT - ASSIGNMENT 1
+-----------------------------
+
+Group Members:
+Cameron Sapp -
+Manivanna Thevathasan -
+Kaitlin Smith - 0645771
+
+-----------------------------
+
+PROBLEM SOLUTION
+
+-----------------------------
+
+TESTING
+
+-----------------------------
+
+PROBLEMS ENCOUNTERED
+
+-----------------------------
+
+SAMPLE RUN
+
+-----------------------------
+
+DESIGN DECISIONS
+
+-----------------------------
