@@ -3,7 +3,7 @@ REPORT - ASSIGNMENT 1
 
 Group Members:
 Cameron Sapp -
-Manivanna Thevathasan -
+Manivanna Thevathasan - 0754015
 Kaitlin Smith - 0645771
 
 -----------------------------
@@ -12,9 +12,73 @@ PROBLEM SOLUTION
 
 -----------------------------
 
+The problem was solved by decomposing the given requirements of the learning switch into several
+different components. The components include the input reader, switch, cache, and HexTrie.
+
+Input Reader: main(filepath)
+	The default code block that is required for a python program to execute it's first functions. 
+	Within 'main', the .txt file containing the packets is opened and each line is read into the
+	python program one by one, stored within various variables. It is here the first checks for 
+	incorrect files, missing cache size and/or missing packets is accounted for. Once these 
+	variables are initialized and the checks have passed, the next component, 'Switch', is called. 
+	
+Switch: Switch(object)
+	Each packet, which contains a triple of (port, source, destination), is seperated into seperate 
+	variables that represent each of those values. Here several checks are in place to check the 
+	three variables, to make sure they are of the correct format. If each of the checks pass, then
+	the variables are passed to the cache followed by being passed to the HexTrie. Once they are 
+	saved within the cache and HexTrie, the output is printed which displays outcome of this packet.
+	
+Cache: Cache(object): 
+	The Cache component first takes the incoming packet's source MAC address and checks whether it
+	already exists within the cache. If it does, then it removes the source address/port association
+	from the cache and from the	HexTrie. The reason for this, is to account for the case where one 
+	source MAC address could potentially be associated with two different ports. Once it's removed, 
+	the new source address/port association is added to the cache and HexTrie. If the number of entries
+	within the cache exceeds the maximum number allowed, then the first entry in the cache, (representing
+	the least-recently used entry), is removed.
+
+HexTrie: HexTrie(object)	
+	Add more....
+
 TESTING
 
 -----------------------------
+
+
+The program was first tested for incorrect/incomplete data. This included the following:
+
+	- Missing values for the number of ports and/or size of the cache
+	- Cache size of 0
+	- Incorrect triple, ie. inputting less than the required 3 values (port, source, destination)
+	- Incorrect MAC Address format
+	- Out of bound ports, ie. If number of ports in the first line is 'x' 
+	  then any packet from port 'y' such that 'y' > 'x' should produce an 
+	  error as it is out of bounds
+	- No packets specified
+
+Once the tests on these checks, (that were implemented to account for these situations), passed; then 
+the program was tested for specific test cases that tested the implementation of the learning switch.
+This included the following:
+
+- Small cache size and several packets from unique ports:
+		This test was to ensure that old packets were infact being removed from the cache and trie in a
+		least-recently-used pattern. With a small cache and several unique packets, the program was able
+		to remove the least-recently-used port and source MAC address from both the trie and cache continuously. 
+
+- Two ports associated to the same MAC Address
+		This test was to account for the case where we received a packet from a particular source MAC address
+		but from two different ports. Packets, (in the form of the (s,p,d) triple), were created such that 
+		a source MAC address 's', associated with a port 'x' would be sent first. Next, a packet with
+		a destination MAC address of 's' would be sent. This was to check that the output message read
+		that the packet had been sent to port 'x'. Then another packet containing 's' as the 
+		source MAC address and 'y' as the port would be sent. Finally a packet would be sent with a destination
+		MAC address of 's' yet again; this time checking to see if the output message read that the packet
+		was sent to port 'y' instead of port 'x'. Since port 'x' != port 'y', it was known that the source
+		MAC address had been associated with the new port.
+		
+		Add any more test cases....
+
 
 PROBLEMS ENCOUNTERED
 
@@ -23,6 +87,33 @@ PROBLEMS ENCOUNTERED
 SAMPLE RUN
 
 -----------------------------
+
+Command:
+$ python a1.py test.txt
+
+Input:
+128
+32
+51 2C:37:BB:25:74:F8 B8:97:D7:45:34:FF
+32 AA:F1:35:C5:94:E3 88:87:47:DE:D4:32
+12 AB:E2:46:2C:78:11 AA:F1:35:C5:94:E3
+78 CD:C0:D8:4B:1D:1C AB:E2:46:2C:78:11
+22 AB:E2:46:2C:78:11 AA:F1:35:C5:94:E3
+19 F1:AC:D6:6B:32:81 AB:E2:46:2C:78:11
+89 D7:55:C0:0F:05:C2 2C:37:BB:25:74:F8
+90 2C:72:2D:24:4A:CF B6:74:8F:65:8F:87
+10 B3:12:01:8D:E0:67 2C:72:2D:24:4A:CF
+
+Output:
+B8:97:D7:45:34:FF all ports except 51
+88:87:47:DE:D4:32 all ports except 32
+AA:F1:35:C5:94:E3 Root --> A --> AA port 32
+AB:E2:46:2C:78:11 Root --> A --> AB port 12
+AA:F1:35:C5:94:E3 Root --> A --> AA port 32
+AB:E2:46:2C:78:11 Root --> A --> AB port 22
+2C:37:BB:25:74:F8 Root --> 2 port 51
+B6:74:8F:65:8F:87 all ports except 90
+2C:72:2D:24:4A:CF Root --> 2 --> 2C --> 2C7 port 90
 
 DESIGN DECISIONS
 
