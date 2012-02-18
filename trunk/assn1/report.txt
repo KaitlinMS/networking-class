@@ -7,88 +7,94 @@ Manivanna Thevathasan - 0754015
 Kaitlin Smith - 0645771
 
 -----------------------------
-
 PROBLEM SOLUTION
-
 -----------------------------
 
 The problem was solved by decomposing the given requirements of the learning switch into several
-different components. The components include the input reader, switch, cache, and HexTrie.
+different parts - the input reader, switch, cache, and HexTrie.
 
 Input Reader: main(filepath)
-	The default code block that is required for a python program to execute it's first functions. 
-	Within 'main', the .txt file containing the packets is opened and each line is read into the
-	python program one by one, stored within various variables. It is here the first checks for 
-	incorrect files, missing cache size and/or missing packets is accounted for. Once these 
-	variables are initialized and the checks have passed, the next component, 'Switch', is called. 
+	The default code block that is required for a python program to execute. Within 'main', the .txt
+	file containing the packets is opened and each line is read into the python program one by one,
+	stored within various variables. It is here the first checks for  incorrect files, missing cache
+	size and/or missing packets is accounted for. Once these variables are initialized and the checks
+	have passed, the next component, 'Switch', is called. 
 	
 Switch: Switch(object)
-	Each packet, which contains a triple of (port, source, destination), is seperated into seperate 
+	Each packet, which contains a triple of (port, source, destination), is separated into separate 
 	variables that represent each of those values. Here several checks are in place to check the 
 	three variables, to make sure they are of the correct format. If each of the checks pass, then
 	the variables are passed to the cache followed by being passed to the HexTrie. Once they are 
-	saved within the cache and HexTrie, the output is printed which displays outcome of this packet.
+	saved within the cache and HexTrie, the output is printed which displays the outcome of this packet.
 	
 Cache: Cache(object): 
 	The Cache component first takes the incoming packet's source MAC address and checks whether it
 	already exists within the cache. If it does, then it removes the source address/port association
-	from the cache and from the	HexTrie. The reason for this, is to account for the case where one 
+	from the cache and from the	HexTrie. The reason for this is to account for the case where one 
 	source MAC address could potentially be associated with two different ports. Once it's removed, 
 	the new source address/port association is added to the cache and HexTrie. If the number of entries
 	within the cache exceeds the maximum number allowed, then the first entry in the cache, (representing
 	the least-recently used entry), is removed.
 
-HexTrie: HexTrie(object)	
-	Add more....
+HexTrieNode: HexTrieNode(object)	
+	This class contains the bulk of the hex trie work. The add_child function checks to see if the current
+	node is a leaf or a child. If it's a leaf, a child is created with the cache's information. Otherwise, 
+	a new leaf is created. The remove function will "fix" the trie after a node has removed itself, which
+	can occur in the Cache class. Finally, the search function will locate a node within the trie. There
+	are two events which can cause the search to fail (and have been taken care of within the function):
+	if the node is not a leaf but does not have a path to the address through its children, and if the
+	node is a leaf but its cache entry doesn't match the search address.
 
-TESTING
+HexTrie: HexTrie(object)
+	This class is responsible for the initial set up of the trie, and its methods are called within the
+	Switch class. It begins by creating a root node. Similar to the HexTrieNode class, this class also
+	contains add, search and remove functions. The add function utilizes the HexTrieNode to create nodes.
 
 -----------------------------
-
+TESTING
+-----------------------------
 
 The program was first tested for incorrect/incomplete data. This included the following:
-
 	- Missing values for the number of ports and/or size of the cache
 	- Cache size of 0
 	- Incorrect triple, ie. inputting less than the required 3 values (port, source, destination)
 	- Incorrect MAC Address format
-	- Out of bound ports, ie. If number of ports in the first line is 'x' 
-	  then any packet from port 'y' such that 'y' > 'x' should produce an 
-	  error as it is out of bounds
+	- Out of bound ports, ie. If number of ports in the first line is 'x' then any packet from port
+	  'y' such that 'y' > 'x' should produce an error as it is out of bounds
 	- No packets specified
 
-Once the tests on these checks, (that were implemented to account for these situations), passed; then 
+Once the tests on these checks (that were implemented to account for these situations) passed, then 
 the program was tested for specific test cases that tested the implementation of the learning switch.
 This included the following:
 
 - Small cache size and several packets from unique ports:
-		This test was to ensure that old packets were infact being removed from the cache and trie in a
+		This test was to ensure that old packets were in fact being removed from the cache and trie in a
 		least-recently-used pattern. With a small cache and several unique packets, the program was able
-		to remove the least-recently-used port and source MAC address from both the trie and cache continuously. 
+		to remove the least-recently-used port and source MAC address from both the trie and cache
+		continuously. 
 
 - Two ports associated to the same MAC Address
 		This test was to account for the case where we received a packet from a particular source MAC address
-		but from two different ports. Packets, (in the form of the (s,p,d) triple), were created such that 
+		but from two different ports. Packets (in the form of the (s,p,d) triple) were created such that 
 		a source MAC address 's', associated with a port 'x' would be sent first. Next, a packet with
 		a destination MAC address of 's' would be sent. This was to check that the output message read
-		that the packet had been sent to port 'x'. Then another packet containing 's' as the 
-		source MAC address and 'y' as the port would be sent. Finally a packet would be sent with a destination
+		that the packet had been sent to port 'x'. Then another packet containing 's' as the source MAC
+		address and 'y' as the port would be sent. Finally a packet would be sent with a destination
 		MAC address of 's' yet again; this time checking to see if the output message read that the packet
 		was sent to port 'y' instead of port 'x'. Since port 'x' != port 'y', it was known that the source
 		MAC address had been associated with the new port.
-		
-		Add any more test cases....
 
-
+-----------------------------
 PROBLEMS ENCOUNTERED
-
 -----------------------------
 
+No problems were encountered during this assignment.
+
+-----------------------------
 SAMPLE RUN
-
 -----------------------------
 
-Command:
+Command to run:
 $ python a1.py test.txt
 
 Input:
@@ -115,6 +121,13 @@ AB:E2:46:2C:78:11 Root --> A --> AB port 22
 B6:74:8F:65:8F:87 all ports except 90
 2C:72:2D:24:4A:CF Root --> 2 --> 2C --> 2C7 port 90
 
-DESIGN DECISIONS
-
 -----------------------------
+DESIGN DECISIONS
+-----------------------------
+
+There were a few decisions that were made when coding this solution.
+
+The program has been split into different classes in order to apply the "separation of concerns" principle.
+
+Dictionaries were chosen over lists for the node children because mapping the indices to letters rather
+than their hexadecimal counterparts was easiest to comprehend.
