@@ -6,15 +6,18 @@ HEADER_SIZE = 4
 
 CHUNK_SIZE = 8
 
-def random_string(n):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(n))
-
-#KEY_LEN = 64
-#KEY = random_string(KEY_LEN)
+# This needs to be a string of length CHUNK_SIZE
 IV = "ranDoM45"
+
+def random_string(n):
+    return ''.join(random.choice(string.ascii_letters + string.digits)
+                   for i in range(n))
 
 def chunkify(s):
     return [s[CHUNK_SIZE*i:CHUNK_SIZE*(i+1)] for i in range(len(s)/CHUNK_SIZE)]
 
 def str_xor(s1, s2):
-    return ''.join(chr(ord(s)^ord(c)) for s,c in zip(s1, s2))
+    # Based on code found here:
+    # http://stackoverflow.com/questions/2612720/how-to-do-bitwise-exclusive-
+    # or-of-two-strings-in-python
+    return ''.join(chr(ord(c1)^ord(c2)) for c1,c2 in zip(s1, s2))
