@@ -35,15 +35,20 @@ class Server(object):
                 break
 
             if not self.data:
+                # We haven't received any data yet, so this must be the first
+                # packet. Extract the header.
                 self.msg_size = struct.unpack(common.FMT_HEADER,
                                               data[:common.HEADER_SIZE])[0]
                 data = data[common.HEADER_SIZE:]
+
             self.data += data
             if len(self.data) >= self.msg_size:
                 decrypted = self.decrypt(self.data)
                 print decrypted[:self.msg_size]
                 break
+
         conn.close()
+
 
 if __name__ == "__main__":
     import sys

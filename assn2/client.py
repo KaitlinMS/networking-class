@@ -1,3 +1,4 @@
+import time
 import struct
 import socket
 
@@ -8,13 +9,8 @@ class Client(object):
     def block_cipher_encrypt(self, chunk):
         return chunk
 
-    def pad(self, msg):
-        cs = common.CHUNK_SIZE
-        padding = (cs - (len(msg) % cs)) % cs
-        return msg + '0'*padding
-
     def encrypt(self, msg):
-        chunks = common.chunkify(self.pad(msg))
+        chunks = common.chunkify(msg)
         ciphertext = [common.str_xor(common.IV, chunks[0])]
         for i in range(1, len(chunks)):
             ci = self.block_cipher_encrypt(
@@ -22,13 +18,33 @@ class Client(object):
             ciphertext.append(ci)
         return ''.join(ciphertext)
 
-    def run(self, host, port):
-        msg = raw_input("Enter a message: ")
+    def get_user_msg(self):
+        msg = ''
+        while not msg:
+            msg = raw_input("Enter a message: ")
+        return msg
+
+    def connect(self):
+        sleep_time = 5
         conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        conn.connect((host, port))
+        while True:
+            try:
+                conn.connect((host, port))
+                return conn
+            except socket.error:
+                print "Could not connect. Retrying in %d seconds" % \
+                        sleep_time
+                time.sleep(sleep_time)
+
+
+    def run(self, host, port):
+        msg = self.get_user_msg()
         header = struct.pack(common.FMT_HEADER, len(msg))
+
+        conn = self.connect()
         conn.sendall(header + self.encrypt(msg))
         conn.close()
+
 
 if __name__ == "__main__":
     import sys
