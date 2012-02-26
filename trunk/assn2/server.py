@@ -9,14 +9,16 @@ class Server(object):
         self.port = port
         self.host = ''
 
-    def dh(self, msg):
-        return msg
+    def block_cipher_decrypt(self, chunk):
+        return chunk
 
     def decrypt(self, data):
         chunks = common.chunkify(data)
-        plaintext = [common.str_xor(common.IV, self.dh(chunks[0]))]
+        plaintext = [common.str_xor(common.IV,
+                                    self.block_cipher_decrypt(chunks[0]))]
         for i in range(1, len(chunks)):
-            pi = common.str_xor(chunks[i-1], self.dh(chunks[i]))
+            pi = common.str_xor(chunks[i-1],
+                                self.block_cipher_decrypt(chunks[i]))
             plaintext.append(pi)
         return ''.join(plaintext)
 
@@ -33,7 +35,8 @@ class Server(object):
                 break
 
             if not self.data:
-                self.msg_size = struct.unpack(common.FMT_HEADER, data[:common.HEADER_SIZE])[0]
+                self.msg_size = struct.unpack(common.FMT_HEADER,
+                                              data[:common.HEADER_SIZE])[0]
                 data = data[common.HEADER_SIZE:]
             self.data += data
             if len(self.data) >= self.msg_size:
@@ -46,3 +49,4 @@ if __name__ == "__main__":
     import sys
     port = int(sys.argv[1])
     Server(port).run()
+

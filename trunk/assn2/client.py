@@ -5,8 +5,8 @@ import common
 
 class Client(object):
 
-    def dh(self, msg):
-        return msg
+    def block_cipher_encrypt(self, chunk):
+        return chunk
 
     def pad(self, msg):
         cs = common.CHUNK_SIZE
@@ -17,7 +17,8 @@ class Client(object):
         chunks = common.chunkify(self.pad(msg))
         ciphertext = [common.str_xor(common.IV, chunks[0])]
         for i in range(1, len(chunks)):
-            ci = self.dh(common.str_xor(chunks[i], ciphertext[i-1]))
+            ci = self.block_cipher_encrypt(
+                    common.str_xor(chunks[i], ciphertext[i-1]))
             ciphertext.append(ci)
         return ''.join(ciphertext)
 
