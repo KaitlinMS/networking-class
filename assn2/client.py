@@ -1,6 +1,5 @@
+import struct
 import socket
-import random
-import string
 
 import common
 
@@ -9,8 +8,13 @@ class Client(object):
     def dh(self, msg):
         return msg
 
+    def pad(self, msg):
+        cs = common.CHUNK_SIZE
+        padding = (cs - (len(msg) % cs)) % cs
+        return msg + '0'*padding
+
     def encrypt(self, msg):
-        chunks = common.chunkify(msg)
+        chunks = common.chunkify(self.pad(msg))
         ciphertext = [common.str_xor(common.IV, chunks[0])]
         for i in range(1, len(chunks)):
             ci = self.dh(common.str_xor(chunks[i], ciphertext[i-1]))
@@ -21,7 +25,8 @@ class Client(object):
         msg = raw_input("Enter a message: ")
         conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         conn.connect((host, port))
-        conn.sendall(self.encrypt(msg))
+        header = struct.pack(common.FMT_HEADER, len(msg))
+        conn.sendall(header + self.encrypt(msg))
         conn.close()
 
 if __name__ == "__main__":

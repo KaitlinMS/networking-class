@@ -1,3 +1,4 @@
+import struct
 import socket
 
 import common
@@ -24,12 +25,21 @@ class Server(object):
         s.bind((self.host, self.port))
         s.listen(1)
         print "Server listening..."
+        self.data = ''
         conn, addr = s.accept()
         while 1:
             data = conn.recv(1024)
             if not data:
                 break
-            print self.decrypt(data)
+
+            if not self.data:
+                self.msg_size = struct.unpack(common.FMT_HEADER, data[:common.HEADER_SIZE])[0]
+                data = data[common.HEADER_SIZE:]
+            self.data += data
+            if len(self.data) >= self.msg_size:
+                decrypted = self.decrypt(self.data)
+                print decrypted[:self.msg_size]
+                break
         conn.close()
 
 if __name__ == "__main__":
