@@ -14,7 +14,7 @@ def random_string(n):
                    for i in range(n))
 
 def chunkify(s):
-    return [s[CHUNK_SIZE*i:CHUNK_SIZE*(i+1)] for i in range(len(s)/CHUNK_SIZE)]
+    return [s[i:i+CHUNK_SIZE] for i in xrange(0, len(s), CHUNK_SIZE)]
 
 def str_xor(s1, s2):
     # Based on code found here:
