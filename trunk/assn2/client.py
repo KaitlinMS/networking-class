@@ -7,11 +7,12 @@ import common
 class Client(object):
 
     def block_cipher_encrypt(self, chunk):
-        return chunk
+        return common.str_xor(chunk, common.KEY)
 
     def encrypt(self, msg):
         chunks = common.chunkify(msg)
-        ciphertext = [common.str_xor(common.IV, chunks[0])]
+        ciphertext = [self.block_cipher_encrypt(
+                        common.str_xor(common.IV, chunks[0]))]
         for i in range(1, len(chunks)):
             ci = self.block_cipher_encrypt(
                     common.str_xor(chunks[i], ciphertext[i-1]))
@@ -31,7 +32,7 @@ class Client(object):
             try:
                 conn.connect((host, port))
                 return conn
-            except socket.error:
+            except socket.error, e:
                 print "Could not connect. Retrying in %d seconds" % \
                         sleep_time
                 time.sleep(sleep_time)

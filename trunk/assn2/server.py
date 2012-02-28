@@ -10,7 +10,7 @@ class Server(object):
         self.host = ''
 
     def block_cipher_decrypt(self, chunk):
-        return chunk
+        return common.str_xor(chunk, common.KEY)
 
     def decrypt(self, data):
         chunks = common.chunkify(data)
