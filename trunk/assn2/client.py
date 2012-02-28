@@ -6,16 +6,14 @@ import common
 
 class Client(object):
 
-    def block_cipher_encrypt(self, chunk):
+    def encrypt_chunk(self, chunk):
         return common.str_xor(chunk, common.KEY)
 
     def encrypt(self, msg):
         chunks = common.chunkify(msg)
-        ciphertext = [self.block_cipher_encrypt(
-                        common.str_xor(common.IV, chunks[0]))]
+        ciphertext = [self.encrypt_chunk(common.str_xor(common.IV, chunks[0]))]
         for i in range(1, len(chunks)):
-            ci = self.block_cipher_encrypt(
-                    common.str_xor(chunks[i], ciphertext[i-1]))
+            ci = self.encrypt_chunk(common.str_xor(chunks[i], ciphertext[i-1]))
             ciphertext.append(ci)
         return ''.join(ciphertext)
 

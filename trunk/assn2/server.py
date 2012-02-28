@@ -9,16 +9,14 @@ class Server(object):
         self.port = port
         self.host = ''
 
-    def block_cipher_decrypt(self, chunk):
+    def decrypt_chunk(self, chunk):
         return common.str_xor(chunk, common.KEY)
 
     def decrypt(self, data):
         chunks = common.chunkify(data)
-        plaintext = [common.str_xor(common.IV,
-                                    self.block_cipher_decrypt(chunks[0]))]
+        plaintext = [common.str_xor(common.IV, self.decrypt_chunk(chunks[0]))]
         for i in range(1, len(chunks)):
-            pi = common.str_xor(chunks[i-1],
-                                self.block_cipher_decrypt(chunks[i]))
+            pi = common.str_xor(chunks[i-1], self.decrypt_chunk(chunks[i]))
             plaintext.append(pi)
         return ''.join(plaintext)
 
