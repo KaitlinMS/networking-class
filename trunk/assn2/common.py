@@ -1,12 +1,23 @@
-import random
-import string
+"""
+common.py
+A collection of a few common constants and functions 
+used by both the client and server.
+
+************************************************************
+SFWR ENG 4C03 - Assignment 2
+Authors:
+Cameron Sapp		   - 0768086
+Kaitlin Smith		   - 0645771
+Manivanna Thevathasan  - 0754015
+************************************************************
+"""
 
 FMT_HEADER = "!i"
 HEADER_SIZE = 4
 
 CHUNK_SIZE = 8
 
-# These need to be strings of length CHUNK_SIZE
+# These need to be strings of length >= CHUNK_SIZE
 IV = "ranDoM45"
 KEY = "l0oKak3y"
 

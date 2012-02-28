@@ -1,3 +1,16 @@
+"""
+Usage:
+python client.py <host> <port>
+
+************************************************************
+SFWR ENG 4C03 - Assignment 2
+Authors:
+Cameron Sapp		   - 0768086
+Kaitlin Smith		   - 0645771
+Manivanna Thevathasan  - 0754015
+************************************************************
+"""
+
 import time
 import struct
 import socket
