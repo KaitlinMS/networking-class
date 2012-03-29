@@ -1,0 +1,47 @@
+REPORT - ASSIGNMENT 2
+-----------------------------
+
+Group Members:
+Cameron Sapp - 0768086
+Manivanna Thevathasan - 0754015
+Kaitlin Smith - 0645771
+
+-----------------------------
+PROBLEM SOLUTION
+-----------------------------
+
+Describe CBC implementation here.
+
+-----------------------------
+TESTING
+-----------------------------
+
+
+
+-----------------------------
+PROBLEMS ENCOUNTERED
+-----------------------------
+
+No problems were encountered during this assignment.
+
+-----------------------------
+SAMPLE RUN
+-----------------------------
+
+Note: Please keep in mind that the server must start running before the client is run.
+The server and client were run in separate console windows, thus the sample run below shows
+the output that occurred within each window.
+
+Server Output:
+./server 5000
+Server listening...
+Hello! This is a sample run. 12345678.
+
+Client Output:
+./client localhost 5000
+Enter a message: Hello! This is a sample run. 12345678.
+
+-----------------------------
+DESIGN DECISIONS
+-----------------------------
+

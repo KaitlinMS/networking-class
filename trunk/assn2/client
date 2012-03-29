@@ -2,7 +2,7 @@
 
 """
 Usage:
-python client.py <host> <port>
+./client <host> <port>
 
 ************************************************************
 SFWR ENG 4C03 - Assignment 2
