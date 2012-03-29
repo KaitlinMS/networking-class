@@ -10,7 +10,13 @@ Kaitlin Smith - 0645771
 PROBLEM SOLUTION
 -----------------------------
 
-Describe CBC implementation here.
+CBC is implemented as the function 'encrypt' on the client side. The reason being,
+messages need to be encrypted prior to being sent. The function takes in a message,
+and breaks it into a list of chunks where each chunk adheres to a predefined length. 
+Initially the first chunk is xor'ed with the Initialization vector and then again with 
+Key. Following that each chunk is xor'ed with the previous encrypted chunk until all 
+chunks are encrypted. Finally the entire ciphertext is formed with all encrypted chunks
+concatenated together. 
 
 -----------------------------
 TESTING
