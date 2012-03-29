@@ -45,3 +45,6 @@ Enter a message: Hello! This is a sample run. 12345678.
 DESIGN DECISIONS
 -----------------------------
 
+The code was split into three files, enforcing separation of concern and keeping like functions
+together. Not only was the code for the client and server put into separate files, but a small
+collection of more general and shared functions was placed in the common.py file.
