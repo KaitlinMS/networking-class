@@ -31,7 +31,7 @@ that this issue is out of our hands, (we can't unblock incoming connections on s
 However, running these files on machines that are connected via LAN did yield successful
 connections. 
 
-We also tested running this code while providing it both a hostname and an IP address, both
+We also tested running the client while providing it both a hostname and an IP address, both
 result in successful connections. 
 
 -----------------------------
