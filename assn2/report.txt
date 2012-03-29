@@ -16,13 +16,23 @@ and breaks it into a list of chunks where each chunk adheres to a predefined len
 Initially the first chunk is xor'ed with the Initialization vector and then again with 
 Key. Following that each chunk is xor'ed with the previous encrypted chunk until all 
 chunks are encrypted. Finally the entire ciphertext is formed with all encrypted chunks
-concatenated together. 
+concatenated together. A chunk size of 8, the value of the Initialization Vector and 
+the Key were all determined arbitrarily. 
 
 -----------------------------
 TESTING
 -----------------------------
 
+We tested the program by running different scenarios in which this client-server 
+combination could run. Running either the client or server on one machine and then
+trying to run the opposite chosen file on another machine, (not connected via LAN), 
+will not result in a successful connection. We document this fact because it was found, 
+that this issue is out of our hands, (we can't unblock incoming connections on servers). 
+However, running these files on machines that are connected via LAN did yield successful
+connections. 
 
+We also tested running this code while providing it both a hostname and an IP address, both
+result in successful connections. 
 
 -----------------------------
 PROBLEMS ENCOUNTERED
@@ -54,3 +64,7 @@ DESIGN DECISIONS
 The code was split into three files, enforcing separation of concern and keeping like functions
 together. Not only was the code for the client and server put into separate files, but a small
 collection of more general and shared functions was placed in the common.py file.
+
+We are assuming that input provided to our client and server are in both correct and acceptable.
+As such we didn't include any error checking code. The reason for this decision was 
+based on the last assignment's correct and acceptable provided input. 
