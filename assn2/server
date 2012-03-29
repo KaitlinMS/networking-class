@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 """
 Usage:
 python server.py <port>
