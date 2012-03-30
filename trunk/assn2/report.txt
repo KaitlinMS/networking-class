@@ -10,14 +10,17 @@ Kaitlin Smith - 0645771
 PROBLEM SOLUTION
 -----------------------------
 
-CBC is implemented as the function 'encrypt' on the client side. The reason being,
-messages need to be encrypted prior to being sent. The function takes in a message,
-and breaks it into a list of chunks where each chunk adheres to a predefined length. 
+CBC is implemented as the function 'encrypt' on the client side. The reason being
+messages need to be encrypted prior to being sent. The function takes in a message
+and breaks it into a list of chunks where each chunk adheres to a predefined length.
 Initially the first chunk is xor'ed with the Initialization vector and then again with 
 Key. Following that each chunk is xor'ed with the previous encrypted chunk until all 
 chunks are encrypted. Finally the entire ciphertext is formed with all encrypted chunks
-concatenated together. A chunk size of 8, the value of the Initialization Vector and 
-the Key were all determined arbitrarily. 
+concatenated together.
+
+A chunk size of 8, the value of the Initialization Vector and 
+the Key were all determined arbitrarily. However, a small chunk size as well as a multiple
+of two was found to be an easy size to test with.
 
 -----------------------------
 TESTING
@@ -26,8 +29,8 @@ TESTING
 We tested the program by running different scenarios in which this client-server 
 combination could run. Running either the client or server on one machine and then
 trying to run the opposite chosen file on another machine, (not connected via LAN), 
-will not result in a successful connection. We document this fact because it was found, 
-that this issue is out of our hands, (we can't unblock incoming connections on servers). 
+will not result in a successful connection. We document this fact because it was found 
+that this issue is out of our hands (we can't unblock incoming connections on servers). 
 However, running these files on machines that are connected via LAN did yield successful
 connections. 
 
