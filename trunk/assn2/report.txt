@@ -22,6 +22,11 @@ A chunk size of 8, the value of the Initialization Vector and
 the Key were all determined arbitrarily. However, a small chunk size as well as a multiple
 of two was found to be an easy size to test with.
 
+If the client is unable to connect to the server, it will continuously retry every 5 seconds
+until a successful connection is made or it is manually stopped. This continuous retry helps
+avoid problems arising from starting the client before the server, but also helps when the client
+is having "legitimate" issues with connection.
+
 -----------------------------
 TESTING
 -----------------------------
